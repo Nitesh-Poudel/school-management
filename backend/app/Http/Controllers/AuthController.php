@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -51,35 +52,40 @@ class AuthController extends Controller
     }
 
  //logins
-    public function login(Request $req)
-    {
-        try {
-            $req->validate([
-                'email' => 'required|email',
-                'password' => 'required',
-            ]);
+ public function login(Request $req)
+{
+    \Log::info('Login Attempt:', $req->all()); // Log the received data
 
-            $user = User::where('email', $req->email)->first();
-
-            if (!$user || !Hash::check($req->password, $user->password)) {
-                return response()->json(['message' => 'Invalid credentials'], 401);
-            }
-
-            // Generate new token
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                'message' => 'Login successful',
-                'user' => $user,
-                'token' => $token
-            ]);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
-        }
+    try {
+        // Validate input
+        $credentials = $req->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    } catch (ValidationException $e) {
+        return response()->json([
+            'message' => 'Validation failed',
+            'errors' => $e->errors()
+        ], 422);
     }
+
+    if (!Auth::attempt($credentials)) {
+        \Log::info('Invalid credentials:', $req->all()); // Log the attempt
+        return response()->json([
+            'message' => 'Invalid email or password'
+        ], 401);
+    }
+
+    $user = Auth::user();
+    $token = $user->createToken('auth_token')->plainTextToken;
+    \Log::info('Validated:', ['user' => $user]);
+
+    return response()->json([
+        'message' => 'Login successful',
+        'user' => $user,
+        'token' => $token
+    ], 200);
+}
 
     /**
      * User logout.
