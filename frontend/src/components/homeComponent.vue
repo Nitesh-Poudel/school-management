@@ -1,22 +1,36 @@
 <template>
-   <HeaderComponent/>
+ 
 
-<div>
+<div class="container">
     loged in {{ user.name }}
     role {{ user.role }}
-    <!-- {{ user }} -->
+    
+    <div v-if="user.role === 'admin'">
+        <router-link to="/add/school">Add School</router-link>
+        <AdminDashboard/>
+    </div>
+    <div v-if="user.role === 'user'">
+        <router-link to="/add/school">Add School</router-link>
+        <UserDashboard/>
+    </div>
+
+  
 </div>
 </template>
 
 
 <script>
 import axios from "axios";
-import HeaderComponent from '@/components/layout/header.vue';
+
+// import addSchool from '@/components/admin/addSchool.vue';
+import AdminDashboard from '@/components/admin/adminDashboard.vue';
+import UserDashboard from "@/components/user/userDashboard.vue";
 
 export default {
     name: "homeComponent",
     components:{
-        HeaderComponent
+        AdminDashboard,
+        UserDashboard
     },
     data() {
         return {

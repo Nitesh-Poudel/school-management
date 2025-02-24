@@ -80,11 +80,15 @@ class AuthController extends Controller
     $token = $user->createToken('auth_token')->plainTextToken;
     \Log::info('Validated:', ['user' => $user]);
 
-    return response()->json([
-        'message' => 'Login successful',
-        'user' => $user,
-        'token' => $token
-    ], 200);
+    if($user){
+        $user=User::with('roles')->get();
+        return response()->json([
+            'message' => 'Login successful',
+            'user' => $user,
+            'token' => $token
+        ], 200);
+    }
+   
 }
 
     /**
