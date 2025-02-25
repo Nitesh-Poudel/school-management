@@ -59,9 +59,19 @@ export default {
                         "Accept": "application/json"
                     }
                 });
+                
+                if (response.data.user) {
+                    console.log("🛠️ User Data:", response.data.user);
+                    console.log("🛠️ Role:", response.data.user.role); // Log role
+                    console.log("🛠️ Roles:", response.data.user.roles); // Log roles
 
-                console.log(" Login successful!");
-                console.log(" Response Data:", response.data);
+                    if (response.data.user.roles) {
+                        console.log("✅ Roles found:", response.data.user.roles);
+                    } else {
+                        console.error("❌ Roles are missing from API response!");
+                    }
+                }
+
                 if (response.data.token) {
                     console.log("Received Token:", response.data.token);
                     localStorage.setItem("auth_token", response.data.token); // Store the token

@@ -70,24 +70,36 @@ class AuthController extends Controller
     }
 
     if (!Auth::attempt($credentials)) {
-        \Log::info('Invalid credentials:', $req->all()); // Log the attempt
+        \Log::info('Login Attempt:', $req->all()); // Log the attempt
         return response()->json([
             'message' => 'Invalid email or password'
         ], 401);
     }
-
+    
     $user = Auth::user();
     $token = $user->createToken('auth_token')->plainTextToken;
-    \Log::info('Validated:', ['user' => $user]);
+    \Log::info('Validated:', ['user' => $user->toArray()]); // Convert to array before logging
+    
+    if ($user) {
+        $user = User::with('roles')->find($user->id);
+        // $user->load('roles'); // Ensure roles are loaded
 
-    if($user){
-        $user=User::with('roles')->get();
+    // dd($user->toArray()); 
+        \Log::info('login user', ['user' => $user->toArray()]); // Fix logging issue
+    
         return response()->json([
             'message' => 'Login successful',
-            'user' => $user,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+                'roles' => $user->roles, // Ensure roles are explicitly included
+            ],
             'token' => $token
         ], 200);
     }
+    
    
 }
 

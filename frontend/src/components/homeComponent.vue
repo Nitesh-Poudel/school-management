@@ -2,9 +2,9 @@
  
 
 <div class="container">
-    loged in {{ user.name }}
+    <!-- loged in {{ user.name }}
     role {{ user.role }}
-    
+     -->
     <div v-if="user.role === 'admin'">
         <router-link to="/add/school">Add School</router-link>
         <AdminDashboard/>
