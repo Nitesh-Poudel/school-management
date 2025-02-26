@@ -17,10 +17,12 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
     Route::get('/users', [UserController::class, 'index']); // Get all users
     Route::get('/users/{id}', [UserController::class, 'show']); // Get user by ID
     Route::get('/create/school',[UserController::class,'createSchoolProfile']);
+   
 
      // School Management
      Route::get('/schools', [SchoolController::class, 'index']); // Get all schools
      Route::post('/schools/add', [SchoolController::class, 'addSchool']); // Add a school
 });
+Route::get('user/{userId}/role', [UserController::class, 'userRoles'])->middleware('auth:sanctum');
 
 

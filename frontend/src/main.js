@@ -1,5 +1,6 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import { createPinia } from "pinia";
+import App from './App.vue';
 import router from './router'; // Import the router
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,7 +9,9 @@ import 'chart.js/auto';
 import 'typeface-poppins';
 import 'typeface-roboto';
 
+const pinia = createPinia(); // Create Pinia instance
 
 createApp(App)
-.use(router) // Add this line
-.mount('#app')
+    .use(pinia) // Register Pinia
+    .use(router) // Register Router
+    .mount('#app');

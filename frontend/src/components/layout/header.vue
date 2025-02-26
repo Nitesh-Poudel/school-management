@@ -1,6 +1,6 @@
 <template>
   <div class="header border ">
-    <h1>This is Header</h1>
+    <h1><span>{{ school }}</span></h1>
     <button v-if="token" @click="logout" class="logout-btn">Logout</button>
   </div>
 </template>

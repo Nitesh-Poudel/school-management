@@ -1,72 +1,54 @@
 <template>
- 
+  <HeaderComponent/>
+  <div class="container">
+    <!-- Debugging: -->
+    <!-- Logged in: {{ user?.name }} -->
+    <!-- Role: {{ user?.role }} -->
 
-<div class="container">
-    <!-- loged in {{ user.name }}
-    role {{ user.role }}
-     -->
-    <div v-if="user.role === 'admin'">
-        <router-link to="/add/school">Add School</router-link>
-        <AdminDashboard/>
-    </div>
-    <div v-if="user.role === 'user'">
-        <router-link to="/add/school">Add School</router-link>
-        <UserDashboard/>
+    <div v-show="user?.role === 'admin'">
+      <router-link to="/add/school">Add School</router-link>
+      <AdminDashboard />
     </div>
 
-  
-</div>
+    <div v-show="user?.role === 'user'">
+      <UserDashboard />
+    </div>
+  </div>
 </template>
 
-
 <script>
-import axios from "axios";
-
-// import addSchool from '@/components/admin/addSchool.vue';
-import AdminDashboard from '@/components/admin/adminDashboard.vue';
+import { useAuthStore } from "@/stores/auth";
+import HeaderComponent from '@/components/layout/header.vue';
+import AdminDashboard from "@/components/admin/adminDashboard.vue";
 import UserDashboard from "@/components/user/userDashboard.vue";
 
 export default {
-    name: "homeComponent",
-    components:{
-        AdminDashboard,
-        UserDashboard
+  name: "homeComponent",
+  components: {
+    AdminDashboard,
+    UserDashboard,
+    HeaderComponent
+  },
+  data() {
+    return {
+      user: null,
+      // loading: true,
+    };
+  },
+  methods: {
+    async fetchUserData() {
+      const authStore = useAuthStore();
+      if (!authStore.user) {
+        await authStore.fetchUser();
+      }
+      this.user = authStore.user;
+      console.log('this user',this.user)
+      // this.loading = false;
     },
-    data() {
-        return {
-            user: {} // Store user details here
-        };
-    },
-    async created() {
-        await this.getUserDetails();
-    },
-    methods: {
-        async getUserDetails() {
-            try {
-                const token = localStorage.getItem("auth_token");
-
-                if (!token) {
-                    console.error("No token found, redirecting to login...");
-                    this.$router.push("/login"); // Redirect if no token
-                    return;
-                }
-
-                console.log("📡 Fetching logged-in user details...");
-                const response = await axios.get("http://localhost:8000/api/user", {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Accept": "application/json"
-                    }
-                });
-
-                console.log("✅ User details fetched:", response.data);
-                this.user = response.data;
-
-            } catch (error) {
-                console.error("❌ Failed to fetch user details:", error);
-                this.$router.push("/login"); // Redirect to login if request fails
-            }
-        }
-    }
-};
+  },
+  async mounted() {
+    console.log("this is .........")
+    await this.fetchUserData();
+  },
+}
 </script>
