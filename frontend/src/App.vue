@@ -156,4 +156,26 @@ footer {
   padding: 20px;
   font-size: 1rem;
 }
+/* Total scrollbar width */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* The track (background) of the scrollbar */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* The draggable thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+  border: 3px solid #f1f1f1; /* Optional: adds space around thumb */
+}
+
+/* On hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
 </style>

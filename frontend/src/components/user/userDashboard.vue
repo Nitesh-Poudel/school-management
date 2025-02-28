@@ -12,7 +12,7 @@
 
         <!-- Check if the user is an admin -->
         <div v-if="userRoles.includes('administrator')">
-            <h3>Admin Panel</h3>
+            <router-link to="/administrator"><h3>Admin Panel</h3></router-link>
             <router-link to="/manage-users">Manage Users</router-link>
             <router-link to="/reports">Reports</router-link>
         </div>
@@ -216,20 +216,24 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-.dashboard {
-    display: flex;
-}
-
+<style>
 .sidebar {
     width: 250px;
     background: #235784;
     color: white;
     padding: 20px;
     height: 100vh;
-    position: fixed;
+   
 }
+</style>
+
+<style scoped>
+.sidebar{ position: fixed;}
+.dashboard {
+    display: flex;
+}
+
+
 
 .sidebar a {
     display: block;

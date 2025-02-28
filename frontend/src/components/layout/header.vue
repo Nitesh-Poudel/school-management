@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 :root {
-  --primary-color: #3498db; /* Set your primary color */
+  --primary-color:#235784  /* Set your primary color */
 }
 .header {
   height: 100px;
