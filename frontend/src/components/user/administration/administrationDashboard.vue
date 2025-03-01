@@ -1,7 +1,7 @@
 <template>
 <HeaderComponent />
 
-<div class="container d-flex ">
+<div class="container d-flex overflow-hidden">
    
    <sidebarComponent/>
   <div class="w-100 p-2">
@@ -14,7 +14,7 @@
 
 <style scoped>
 .container{
-    max-height: calc(100vh - 130px);
+    height: 90vh;
     overflow: scroll;
     /* background-col   or: blanchedalmond; */
 }

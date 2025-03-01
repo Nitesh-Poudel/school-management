@@ -1,8 +1,10 @@
 <template>
    
+<div class="parent-top border ">
+  
+  <router-view></router-view>
 
-    <router-view></router-view>
-
+</div>
 </template>
 
 <script>
@@ -40,6 +42,7 @@ body {
   padding: 0;
   line-height: 1.6;
 }
+.parent-top{width:100vw;height: 100vh; overflow: hidden;}
 
 /* Headings - Typography and Consistency */
 h1, h2, h3, h4, h5, h6 {

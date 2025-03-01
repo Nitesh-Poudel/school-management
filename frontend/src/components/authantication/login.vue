@@ -46,10 +46,13 @@
     setup() {
       const authStore = useAuthStore(); // Use Pinia store
       const router = useRouter();
+
+     
       return { authStore, router };
     },
     methods: {
       async loginUser() {
+        console.log("🛠️ Before login attempt, authStore:", this.authStore);
     console.log("clicked button");
     try {
       console.log("📡 Sending request to backend...");
@@ -58,6 +61,7 @@
       
       if (response.success) {
         console.log("✅ Login successful!");
+        console.log("🛠️ after login attempt, authStore:", this.authStore);
         this.router.push("/");
       } else {
         this.errorMessage = response.message;

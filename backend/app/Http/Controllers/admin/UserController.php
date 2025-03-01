@@ -4,11 +4,70 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function createUser(Request $req){
+        $validatedData = $req->validate([
+            'firstName' => 'nullable|string|max:255',
+            'lastName' => 'nullable|string|max:255',
+            'email' => 'nullable|email|unique:users,email',
+            'contactNumber' => 'nullable|string|min:10|max:15',
+            'address' => 'nullable|string|max:255',
+            'role' => 'nullable|string|in:user,admin,super_admin',
+            'schoolId'=> 'required|exists:schools,id', 
+        ]);
+    
+        // Extract role separately
+        $role = $validatedData['role'] ?? 'user'; // Default to 'user' if null
+        $hashedPassword = Hash::make($role . '@123');
+    
+        DB::beginTransaction(); // Start transaction
+    
+        try {
+            // Create user
+            $user = User::create([
+                'first_name' => $validatedData['firstName'] ?? null,
+                'last_name' => $validatedData['lastName'] ?? null,
+                'email' => $validatedData['email'] ?? null,
+                'contact_number' => $validatedData['contactNumber'] ?? null,
+                'address' => $validatedData['address'] ?? null,
+                'password' => $hashedPassword,
+            ]);
+    
+            // Store role separately in roles table
+            if (!is_null($role)) {
+                Role::create([
+                    'user_id' => $user->id,
+                    'role' => $role
+                ]);
+            }
+    
+            DB::commit(); // Commit transaction
+    
+            return response()->json([
+                'message' => 'User created successfully',
+                'user' => $user
+            ], 201);
+    
+        } catch (\Exception $e) {
+            DB::rollback(); // Rollback transaction on failure
+    
+            return response()->json([
+                'message' => 'User creation failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+    }
+
+
     /**
      * Display a listing of the users.
      */

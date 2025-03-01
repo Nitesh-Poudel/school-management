@@ -23,6 +23,10 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
      Route::get('/schools', [SchoolController::class, 'index']); // Get all schools
      Route::post('/schools/add', [SchoolController::class, 'addSchool']); // Add a school
 });
+
+Route::prefix('administrator')->middleware('auth:sanctum')->group(function(){
+    Route::post('/create/users', [UserController::class, 'createUser']); 
+});
 Route::get('user/{userId}/role', [UserController::class, 'userRoles'])->middleware('auth:sanctum');
 
 

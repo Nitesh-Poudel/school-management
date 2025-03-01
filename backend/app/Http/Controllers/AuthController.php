@@ -81,7 +81,7 @@ class AuthController extends Controller
     \Log::info('Validated:', ['user' => $user->toArray()]); // Convert to array before logging
     
     if ($user) {
-        $user = User::with('roles')->find($user->id);
+        $user = User::with('roles','school')->find($user->id);
         // $user->load('roles'); // Ensure roles are loaded
 
     // dd($user->toArray()); 
