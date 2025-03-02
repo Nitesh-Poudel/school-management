@@ -3,6 +3,7 @@
     <div class="header">
         <h1>Create User</h1>
     </div>
+    {{ authStore }}
     <div class="card">
         <form @submit.prevent="submitForm">
             <div class="form-grid">
@@ -37,21 +38,25 @@
                             </div>
                         </label>
                     </div>
+                    <!-- <input type="text" v-model="form.schoolId" :value="authStore.school_id" id=""> -->
+
                 </div>
             </div>
             <div class="actions">
                 <button type="button" class="btn-cancel">Cancel</button>
                 <button type="submit">Create User</button>
             </div>
+
         </form>
     </div>
 </div>
 </template>
 
-  
 <script>
 import administrationApiService from '@/services/administrationApi'; // Ensure this file exists and has correct exports
-import { useAuthStore } from "@/stores/auth"; 
+import {
+    useAuthStore
+} from "@/stores/auth";
 export default {
     name: 'CreateUser',
     data() {
@@ -63,7 +68,7 @@ export default {
                 contactNumber: '',
                 address: '',
                 role: '',
-                schoolId:''
+                schoolId: '',
             },
             apiResponse: '',
             roles: [{
@@ -89,15 +94,18 @@ export default {
             ]
         };
     },
-    setup(){
+    setup() {
         const authStore = useAuthStore(); // Access Pinia store
-        return { authStore };
+        return {
+            authStore
+        };
     },
+
     methods: {
         async submitForm() {
             this.schoolId = this.authStore.school_id;
             console.log("🛠️ Auth Store Data:", this.authStore);
-console.log("🔍 schoolId from store:", this.authStore.schoolId);
+            console.log("🔍 schoolId from store:", this.authStore.schoolId);
             console.log(this.form)
             try {
                 const response = await administrationApiService.createUser(this.form);
@@ -113,7 +121,11 @@ console.log("🔍 schoolId from store:", this.authStore.schoolId);
             }
         }
 
+    },
+    mounted() {
+        this.form.schoolId = this.authStore.school_id; // ✅ Set schoolId when the component mounts
     }
+
 };
 </script>
 

@@ -9,18 +9,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log; // Add this line
+
 
 class UserController extends Controller
 {
 
     public function createUser(Request $req){
+        Log::info('Create User Request:', $req->all());
+        // return response()->json($req->all(), 200);
+
         $validatedData = $req->validate([
             'firstName' => 'nullable|string|max:255',
             'lastName' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users,email',
             'contactNumber' => 'nullable|string|min:10|max:15',
             'address' => 'nullable|string|max:255',
-            'role' => 'nullable|string|in:user,admin,super_admin',
+            'role' => 'nullable|string|in:student,teacher,parent',
             'schoolId'=> 'required|exists:schools,id', 
         ]);
     

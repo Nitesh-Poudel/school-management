@@ -1,26 +1,26 @@
 import { defineStore } from "pinia";
-// import axios from "axios";
 import api from "@/services/api";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: null,
+    user: localStorage.getItem("auth_user") 
+      ? JSON.parse(localStorage.getItem("auth_user")) 
+      : null,  // Handle case when storage is empty or invalid
     token: localStorage.getItem("auth_token") || null,
-    school_id: localStorage.getItem("school_id") || null, // Store only the school ID
+    school_id: localStorage.getItem("school_id") || null,
   }),
-
+  
   actions: {
     setUser(user) {
       this.user = user;
+      localStorage.setItem("auth_user", JSON.stringify(user)); // Store user data
+
       if (user && user.school_id) {
         this.school_id = user.school_id;
-        localStorage.setItem("school_id", user.school_id); // Persist in localStorage
-        console.log("✅ school_id stored in Pinia:", this.school_id);
-      } else {
-        console.log("⚠️ school_id is missing in user data:", user);
+        localStorage.setItem("school_id", user.school_id);
       }
     },
-    
+
     setToken(token) {
       this.token = token;
       localStorage.setItem("auth_token", token);
@@ -30,7 +30,7 @@ export const useAuthStore = defineStore("auth", {
       try {
         const response = await api.post("/login", { email, password });
         console.log("🔍 API Response from login:", response.data);
-    
+
         if (response.data.token) {
           this.setToken(response.data.token);
           this.setUser(response.data.user);
@@ -41,32 +41,33 @@ export const useAuthStore = defineStore("auth", {
         return { success: false, message: error.response?.data?.message || "Login failed" };
       }
     },
-    
 
     async fetchUser() {
-      if (!this.token) return;
-
+      if (!this.token) return;  // Ensure we only fetch if a token exists
+    
       try {
-        // const response = await axios.get("http://localhost:8000/api/user", {
-        //   headers: {
-        //     Authorization: `Bearer ${this.token}`,
-        //   },
-        // });
-        const response = await api.get('/user')
-
+        const response = await api.get('/user');
         this.setUser(response.data);
       } catch (error) {
-        console.error("Failed to fetch user:", error);
+        console.error("❌ Failed to fetch user:", error);
         this.logoutUser();
       }
     },
+    
 
     logoutUser() {
       this.token = null;
       this.user = null;
-      this.school_id = null; // Clear school_id on logout
+      this.school_id = null;
       localStorage.removeItem("auth_token");
-      localStorage.removeItem("school_id"); // Remove school_id from localStorage
+      localStorage.removeItem("auth_user"); // Remove user from localStorage
+      localStorage.removeItem("school_id");
+
+  localStorage.removeItem("auth_token");
+  localStorage.removeItem("school_id"); // Remove school_id from localStorage
+
+  // ✅ Force reactivity by resetting the state
+  this.$reset(); 
     },
   },
 });
