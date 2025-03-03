@@ -26,7 +26,11 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
 
 Route::prefix('administrator')->middleware('auth:sanctum')->group(function(){
     Route::post('/create/users', [UserController::class, 'createUser']); 
+    Route::get('/users', [UserController::class, 'getSchoolUsers']);
+
 });
+
+
 Route::get('user/{userId}/role', [UserController::class, 'userRoles'])->middleware('auth:sanctum');
 
 

@@ -3,7 +3,7 @@
     <div class="header">
         <h1>Create User</h1>
     </div>
-    {{ authStore }}
+    <!-- {{ authStore }} -->
     <div class="card">
         <form @submit.prevent="submitForm">
             <div class="form-grid">
@@ -38,7 +38,7 @@
                             </div>
                         </label>
                     </div>
-                    <!-- <input type="text" v-model="form.schoolId" :value="authStore.school_id" id=""> -->
+                    <input type="hidden" v-model="form.schoolId" value="authStore.user.school_id" id="">
 
                 </div>
             </div>

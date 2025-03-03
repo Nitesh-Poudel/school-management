@@ -1,4 +1,6 @@
 import api from '@/services/api'; // Import the Axios instance
+import { useAuthStore } from '@/stores/auth';
+
 
 const administrationApiService = {
   async createUser(userData) {
@@ -7,8 +9,23 @@ const administrationApiService = {
     return response
   },
 
-  getUsers() {
-    return api.get('/users');
+  async getUsers() {
+    const authStore = useAuthStore();
+    console.log("Auth Store:", authStore); // Debugging
+    const schoolId = authStore.school_id;
+    console.log("School ID:", schoolId);
+    
+    console.log("school id is ",schoolId)
+    try {
+      const response = await api.get('/administrator/users', {
+        params: { schoolId } // Pass schoolId as a query parameter
+      });
+      return response;
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      throw error; // Rethrow the error so it can be handled in the component
+    }
+   
   },
 
   getUserById(userId) {
