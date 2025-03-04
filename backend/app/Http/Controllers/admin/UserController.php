@@ -48,7 +48,7 @@ class UserController extends Controller
             $validatedData = $req->validate([
                 'firstName' => 'required|string|max:255',
                 'lastName' => 'nullable|string|max:255',
-                'email' => 'nullable|email|unique:users,email',
+                'email' => 'nullable|email',
                 'address' => 'nullable|string',
                 'role' => 'nullable|in:teacher,admin,studentc,parent',
                 'schoolId' => 'required'
@@ -84,6 +84,26 @@ class UserController extends Controller
         
     
         try {
+
+
+            $user = User::where('email', $validatedData['email'])
+                    ->where('school_id', $validatedData['schoolId'])
+                    ->first();
+
+            if ($user) {
+                Log::info('User already exists, updating roles instead', ['user_id' => $user->id]);
+    
+                // Call updateRoles function to assign the role
+                $this->updateRoles($user->id, $role, $validatedData['schoolId']);
+    
+                DB::commit();
+                return response()->json([
+                    'message' => 'User already exists, role updated successfully',
+                    'user' => $user
+                ], 200);
+            }
+    
+
             // Create user
             $user = User::create([
                 'name' => $validatedData['firstName'].$validatedData['lastName'],
@@ -132,7 +152,23 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+
+
+    private function updateRoles($userId, $role, $schoolId)
+{
+    Role::create([
+        'user_id' => $userId,
+        'role' => $role,
+        'school_id' => $schoolId,
+    ]);
+
+    Log::info('Role updated successfully', ['user_id' => $userId, 'role' => $role]);
+}
     
+
+
+
 
 
     /**

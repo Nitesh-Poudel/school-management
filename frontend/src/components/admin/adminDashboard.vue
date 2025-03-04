@@ -82,7 +82,8 @@
 
 <script>
 import Chart from 'chart.js/auto';
-import axios from "axios";
+// import axios from "axios";
+import SchoolApiService from '@/services/schoolApi';
 export default {
     name: "AdminDashboard",
     mounted() {
@@ -91,24 +92,18 @@ export default {
     },
     data() {
         return {
-            schools: []
+            schools: [],
+            status:'',
         };
     },
 
     methods: {
         async fetchSchools() {
-            try {
-                const token = localStorage.getItem("auth_token");
-                const response = await axios.get("http://127.0.0.1:8000/api/admin/schools", {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                this.schools = response.data.data;
-                console.log('hello', this.schools)
-            } catch (error) {
-                console.error("Error fetching schools:", error);
-            }
+            const response=await SchoolApiService.getSchool()
+        
+            console.log('this is ',response.data.data)
+            console.log('Status',response.data.status)
+            this.schools=response.data.data;
         },
         renderCharts() {
             new Chart(document.getElementById('subscriptionChart'), {

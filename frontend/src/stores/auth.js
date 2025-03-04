@@ -3,17 +3,15 @@ import api from "@/services/api";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    user: localStorage.getItem("auth_user") 
-      ? JSON.parse(localStorage.getItem("auth_user")) 
-      : null,  // Handle case when storage is empty or invalid
-    token: localStorage.getItem("auth_token") || null,
-    school_id: localStorage.getItem("school_id") || null,
+    user: null,
+    token: null,
+    school_id: null,
   }),
-  
+
   actions: {
     setUser(user) {
       this.user = user;
-      localStorage.setItem("auth_user", JSON.stringify(user)); // Store user data
+      localStorage.setItem("auth_user", JSON.stringify(user));
 
       if (user && user.school_id) {
         this.school_id = user.school_id;
@@ -43,31 +41,28 @@ export const useAuthStore = defineStore("auth", {
     },
 
     async fetchUser() {
-      if (!this.token) return;  // Ensure we only fetch if a token exists
-    
+      if (!this.token) return;
+
       try {
-        const response = await api.get('/user');
+        const response = await api.get("/user");
         this.setUser(response.data);
       } catch (error) {
         console.error("❌ Failed to fetch user:", error);
         this.logoutUser();
       }
     },
-    
 
     logoutUser() {
       this.token = null;
       this.user = null;
       this.school_id = null;
       localStorage.removeItem("auth_token");
-      localStorage.removeItem("auth_user"); // Remove user from localStorage
+      localStorage.removeItem("auth_user");
       localStorage.removeItem("school_id");
 
-  localStorage.removeItem("auth_token");
-  localStorage.removeItem("school_id"); // Remove school_id from localStorage
-
-  // ✅ Force reactivity by resetting the state
-  this.$reset(); 
+    
     },
   },
+
+  persist: true, // ✅ This enables state persistence across refreshes
 });

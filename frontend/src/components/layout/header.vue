@@ -1,43 +1,40 @@
 <template>
-  <div class="header border ">
-    <h1><span>{{ school }}</span></h1>
-    <button v-if="token" @click="logout" class="logout-btn">Logout</button>
+  <div class="header border">
+    <h1><span>{{ user }}</span></h1>
+
+    <button v-if="authStore.token" @click="logout" class="logout-btn">Logout</button>
   </div>
 </template>
 
 <script>
+import { useAuthStore } from "@/stores/auth"; // Import Pinia store
+import { computed } from "vue";
+
 export default {
   name: "HeaderComponent",
-  data() {
+  setup() {
+    const authStore = useAuthStore(); // Use Pinia store
+
+    console.log("Auth User:", authStore.user);
+    console.log("Auth Token:", authStore.token);
+    console.log("Auth School ID:", authStore.school_id);
+
     return {
-      token: null, // Stores the authentication token
+      authStore,
+      user: computed(() => authStore), // Make school ID reactive
+      logout: authStore.logoutUser, // Use logout method from store
     };
-  },
-  methods: {
-    checkToken() {
-      // Check if token exists in localStorage
-      this.token = localStorage.getItem("auth_token");
-    },
-    logout() {
-      // Remove token and reload page
-      localStorage.removeItem("auth_token");
-      this.token = null; // Clear token from data
-      window.location.reload(); // Refresh page to reflect logout
-    },
-  },
-  mounted() {
-    this.checkToken(); // Check token when component is mounted
   },
 };
 </script>
 
 <style scoped>
 :root {
-  --primary-color:#235784  /* Set your primary color */
+  --primary-color: #235784;
 }
 .header {
   height: 100px;
-  background-color: var(--primary-color)!important;
+  background-color: var(--primary-color) !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
