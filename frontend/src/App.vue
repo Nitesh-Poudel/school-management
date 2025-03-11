@@ -2,7 +2,9 @@
    
 <div class="parent-top border ">
   
+ <div class="container">
   <router-view></router-view>
+ </div>
 
 </div>
 </template>

@@ -1,6 +1,7 @@
 <template>
-  <div class="header border">
-    <h1><span>{{ user }}</span></h1>
+  <!-- <div class="header border"> -->
+    <div class="py-5 border bg-white shadow-sm">
+    <!-- <h1><span>{{ user.school_id }}</span></h1> -->
 
     <button v-if="authStore.token" @click="logout" class="logout-btn">Logout</button>
   </div>
@@ -21,7 +22,7 @@ export default {
 
     return {
       authStore,
-      user: computed(() => authStore), // Make school ID reactive
+      user: computed(() => authStore), 
       logout: authStore.logoutUser, // Use logout method from store
     };
   },

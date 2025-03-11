@@ -1,49 +1,82 @@
 <template>
-     <div class="sidebar">
-        <h2>Dashboard</h2>
-        <span>{{ school }}</span>
-        <router-link to="/">Home</router-link>
-        <router-link to="/classes">Classes</router-link>
-        <router-link to="/assignments">Assignments</router-link>
-        <router-link to="/messages">Messages</router-link>
-        <router-link to="/settings">Settings</router-link>
-
-        <!-- Check if the user is an admin -->
-        <div v-if="userRoles.includes('administrator')">
-            <h3>Administrator Panel</h3>
-            <router-link to="/manage-users">Manage Users</router-link>
-            <router-link to="/reports">Reports</router-link>
-        </div>
-
-        <!-- Check if the user is a teacher -->
-        <div v-if="userRoles.includes('teacher')">
-            <h3>Teacher Panel</h3>
-            <router-link to="/gradebook">Gradebook</router-link>
-            <router-link to="/schedule">Schedule</router-link>
-        </div>
-
-        <!-- Check if the user is a parent -->
-        <div v-if="userRoles.includes('parent')">
-            <h3>Parent Panel</h3>
-            <router-link to="/child-progress">Child Progress</router-link>
-            <router-link to="/meeting-requests">Meeting Requests</router-link>
-        </div>
+<div class="sidebar" style="overflow: scroll;">
+    <div class="administrator-sidebar" v-if="authStore.user.roles.includes('administrator')">
+      <administratorSidebarComponent/>
     </div>
+ 
+    <div class="teacher-sidebar">
+        <TeacherSidebarComponent/>
+    </div>
+    
+
+</div>
 </template>
+
 <script>
-import {
-    useAuthStore
-} from "@/stores/auth";
-import {
-    mapState
-} from "pinia";
-import axios from "axios";
+import {useAuthStore} from "@/stores/auth";
+import administratorSidebarComponent from "@/components/user/administration/sidebarComponent.vue"
+import TeacherSidebarComponent from "@/components/user/teacher/sidebarComponent.vue"
 
 export default {
-    name:'sidebarComponent'
+    name: 'SidebarComponent',
+    components:{
+        administratorSidebarComponent,
+        TeacherSidebarComponent
+    },
+    setup() {
+        const authStore = useAuthStore(); // Access Pinia store
+        return {
+            authStore
+        };
+    },
 }
 </script>
 
 <style>
+.group {
+    border-bottom: 1px solid gray;
+}
 
+.sidebar {
+    width: 300px!important;
+    padding: 20px;
+    height: 100vh;
+    border-right: 1px solid #ddd;
+    background: #235784;
+}
+
+.sidebar h2 {
+    font-size: 20px;
+    color: #fffefe;
+    margin-bottom: 15px;
+}
+
+.sidebar h3 {
+    font-size: 16px;
+    color: var(--secondary);
+    margin-top: 15px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #d4d4d4;
+    font-size: 14px;
+    display: block;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.sidebar ul li a:hover {
+    background: #007bff;
+    color: white;
+}
 </style>

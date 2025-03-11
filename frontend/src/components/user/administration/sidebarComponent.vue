@@ -1,5 +1,5 @@
 <template>
-    <div class="sidebar" style="overflow: scroll;">
+    <div class="sidebar" style="overflow-y: scroll;">
       <router-link to="/"><h2>🏠 Dashboard</h2></router-link>
         <ul>
             <!-- User Management -->
@@ -16,7 +16,9 @@
             <!-- Teacher Management -->
             <div class="group">
                 <h3>👨‍🏫 Teacher Management</h3>
-                <li><a href="#">📋 Manage Teachers</a></li>
+                <li>
+                    <router-link to="/manage/teacher">📋 Manage Teachers</router-link>
+                </li>
                 <li><a href="#">📚 Assign Subjects</a></li>
                 <li><a href="#">🏫 Assign Classes</a></li>
             </div>
@@ -82,52 +84,7 @@
     
     <script>
     export default {
-        name: 'SidebarComponent',
+        name: 'administratorSidebarComponent',
     }
     </script>
-    
-    <style>
-    .group{border-bottom: 1px solid gray;}
-    .sidebar {
-        width: 250px;
-        padding: 20px;
-        height: 100vh;
-        border-right: 1px solid #ddd;
-    }
-    
-    .sidebar h2 {
-        font-size: 20px;
-        color: #fffefe;
-        margin-bottom: 15px;
-    }
-    
-    .sidebar h3 {
-        font-size: 16px;
-        color: var(--secondary);
-        margin-top: 15px;
-    }
-    
-    .sidebar ul {
-        list-style: none;
-        padding: 0;
-    }
-    
-    .sidebar ul li {
-        margin-bottom: 10px;
-    }
-    
-    .sidebar ul li a {
-        text-decoration: none;
-        color: #d4d4d4;
-        font-size: 14px;
-        display: block;
-        padding: 5px;
-        border-radius: 5px;
-    }
-    
-    .sidebar ul li a:hover {
-        background: #007bff;
-        color: white;
-    }
-    </style>
-    
+  

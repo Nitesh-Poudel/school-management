@@ -6,7 +6,7 @@ import login from '@/components/authantication/login.vue';
 import homeComponent from '@/components/homeComponent.vue';
 import AdministrationDashboard from '@/components/user/administration/administrationDashboard.vue';
 import AdministrationHome from '@/components/user/administration/administrationHome';
-
+import teacherManagementComponent from '@/components/user/administration/components/manageTeacher.vue';
 
 import ManageUsers from '@/components/user/administration/components/manageUsers.vue';
 import CreateUser from '@/components/user/administration/components/createUser.vue';
@@ -50,22 +50,29 @@ const routes = [
         path: 'create-user', // full path becomes /administrator/manage-users
         name: 'CreateUsers',
         component: CreateUser,
+      },
+      {
+        path:'/manage/teacher',
+        component:teacherManagementComponent,
       }
     ]
   },
-  {
-    
-  path:'/teacher',
-  component:TeacherDashboard,
-  meta: { requiresAuth: true, requiredUserRoles: ["teacher"]},
-  children:[
-    {
-      path: '',
-    component:TeacherHome,
-    }
-  ]
+  { 
+    path:'/teacher',
+    component:TeacherDashboard,
+    meta: { requiresAuth: true, requiredUserRoles: ["teacher"]},
+    children:[
+      {
+        path: '',
+        component:TeacherHome,
+      }
+    ]
   
-  }
+  },
+  // {
+  //   path:'/parents',
+  //   component:
+  // }
 ];
 
 const router = createRouter({

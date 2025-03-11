@@ -50,7 +50,7 @@ class UserController extends Controller
                 'lastName' => 'nullable|string|max:255',
                 'email' => 'nullable|email',
                 'address' => 'nullable|string',
-                'role' => 'nullable|in:teacher,admin,studentc,parent',
+                'role' => 'nullable|in:teacher,admin,student,parent',
                 'schoolId' => 'required'
             ]);
     

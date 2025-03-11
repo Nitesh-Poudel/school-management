@@ -3,7 +3,7 @@
     <div class="header">
         <h1>Create User</h1>
     </div>
-    <!-- {{ authStore }} -->
+    <!-- {{ authStore.user.roles}} -->
     <div class="card">
         <form @submit.prevent="submitForm">
             <div class="form-grid">

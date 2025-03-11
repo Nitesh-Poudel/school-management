@@ -1,16 +1,15 @@
 <template>
-  <HeaderComponent/>
-  <div class="container">
-    <!-- Debugging: -->
-    <!-- Logged in: {{ user?.name }} -->
-    <!-- Role: {{ user?.role }} -->
+ 
+  <div class="d-flex">
 
+ 
     <div v-show="user?.role === 'admin'">
       <router-link to="/add/school">Add School</router-link>
       <AdminDashboard />
     </div>
 
     <div v-show="user?.role === 'user'">
+      <HeaderComponent/>
       <UserDashboard />
     </div>
   </div>

@@ -96,6 +96,7 @@ class AuthController extends Controller
                 'role' => $user->role,
                 'roles' => $user->roles, // Ensure roles are explicitly included
                 'school'=>$user->school,
+                'school_id'=>$user->school_id
             ],
             'token' => $token
         ], 200);
