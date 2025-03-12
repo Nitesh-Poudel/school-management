@@ -1,10 +1,10 @@
 <template>
-<div class="shadow card" style="height:calc(100vh - 10px); overflow: scroll;">
-    <div class="header">
+<div class="shadow card">
+    <div class="header p-1 m-1">
         <h1>Create User</h1>
     </div>
     <!-- {{ authStore.user.roles}} -->
-    <div class="card">
+    <div class="card border">
         <form @submit.prevent="submitForm">
             <div class="form-grid">
                 <div class="form-control">

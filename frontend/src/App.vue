@@ -1,12 +1,12 @@
 <template>
    
-<div class="parent-top border ">
+
   
- <div class="container">
+ <div class="container border" style="height:100vh;overflow:hiddmen;">
   <router-view></router-view>
  </div>
 
-</div>
+
 </template>
 
 <script>
@@ -34,6 +34,10 @@ export default {
   --text-color: #333; /* Default text color */
   --bg-color: #f5f5f5; /* Background color */
 }
+
+/* .header {
+  height: 150px;
+} */
 
 /* Apply Base Styles */
 body {

@@ -10,6 +10,10 @@ import 'chart.js/auto';
 import 'typeface-poppins';
 import 'typeface-roboto';
 
+
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+
 const pinia = createPinia();
 pinia.use(piniaPersist); // ✅ Enable Pinia persistence
 

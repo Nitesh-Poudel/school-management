@@ -21,7 +21,7 @@
         </select>
     </div>
 
-    <div class="table-container">
+    <div class="table-container" style="height:90% ">
         <table>
             <thead>
                 <tr>

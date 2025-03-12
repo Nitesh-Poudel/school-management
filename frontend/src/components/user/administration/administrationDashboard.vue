@@ -4,9 +4,12 @@
 <div class=" d-flex overflow-hidden">
 
     <sidebarComponent />
-    <div class="flex-grow-1  overflow-scroll">
+    <div class="flex-grow-1 gap-1  overflow-scroll">
       <HeaderComponent />
+      <div class="borde " style="height:80vh !important; overflow: auto!important;">
         <router-view></router-view>
+      </div>
+       
     </div>
 
 </div>
