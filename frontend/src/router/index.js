@@ -8,6 +8,7 @@ import AdministrationDashboard from '@/components/user/administration/administra
 import AdministrationHome from '@/components/user/administration/administrationHome';
 import teacherManagementComponent from '@/components/user/administration/components/manageTeacher.vue';
 import teacherRoutineComponent from '@/components/user/administration/components/teacherRoutine.vue';
+import manageClassesComponent from '@/components/user/administration/components/manageClasses.vue';
 
 import ManageUsers from '@/components/user/administration/components/manageUsers.vue';
 import CreateUser from '@/components/user/administration/components/createUser.vue';
@@ -59,6 +60,11 @@ const routes = [
       {
         path:'/teacher/routine',
         component:teacherRoutineComponent,
+      },
+      {
+        path:'/manage/class',
+        name: 'ManageClasses', 
+        component: manageClassesComponent,
       }
 
     ]

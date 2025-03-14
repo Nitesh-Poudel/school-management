@@ -18,17 +18,10 @@
                 </select>
 
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Class</label>
-                <select v-model="form.classSection" class="form-select" required>
-                    <option v-for="section in classSections" :key="section.id" :value="section.id">
-                        {{ section.name }}
-                    </option>
-                </select>
-            </div>
+
         </div>
 
-        <div class="row mb-3">
+        <!-- <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Class Section</label>
                 <select v-model="form.classSection" class="form-select" required>
@@ -41,37 +34,61 @@
                 <label class="form-label">Room Number</label>
                 <input type="text" v-model="form.roomNumber" class="form-control" placeholder="Enter room number">
             </div>
-        </div>
+        </div> -->
 
         <div class="mb-3">
+
             <label class="form-label">Subjects & Time Slots</label>
             <div v-for="(slot, index) in form.schedule" :key="index" class="d-flex gap-2 mb-2 align-items-center">
-                <select v-model="slot.subject" class="form-select w-25" required>
+                <div class="">
+
+                    <select v-model="slot.class" class="form-select" style="max-width: 150px!important;" required>
+                        <option value="" selected disabled>Class</option>
+                        <option v-for="classItem in classes" :key="classItem" :value="classItem">
+                            {{ classItem }}
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="">
+
+                    <select v-model="slot.section" class="form-select" style="max-width: 150px!important;" required>
+                        <option value="" selected disabled>Section</option>
+                        <option v-for="sectionItem in sections" :key="sectionItem" :value="sectionItem">
+                           Section {{ sectionItem}}
+                        </option>
+                    </select>
+
+                </div>
+
+                <select v-model="slot.subject" class="form-select w-25 " style="max-width: 120px!important;" required>
+                    <option value="" selected disabled>Subject</option>
                     <option v-for="subject in subjects" :key="subject.id" :value="subject.id">
                         {{ subject.name }}
                     </option>
                 </select>
-                <input type="time" v-model="slot.startTime" class="form-control w-25" required />
-                <input type="time" v-model="slot.endTime" class="form-control w-25" required />
+                <input type="time" v-model="slot.startTime" class="form-control w-20" style="max-width: 100px;" required />
+                <input type="time" v-model="slot.endTime" class="form-control w-20" style="max-width: 100px;" required />
 
                 <div class="position-relative border p-2 rounded bg-light w-50">
-                    <input type="text" :value="selectedDays.join(', ')" @click.stop="showDays = !showDays" placeholder="Choose days" class="form-control w-100  " readonly style="cursor: pointer; background-color: #fff;">
+                    <input type="text" :value="slot.days.join(', ')" @click.stop="slot.showDays = !slot.showDays" placeholder="Choose days" class="form-control w-100" readonly style="cursor: pointer; background-color: #fff;">
 
-                    <div v-show="showDays" class="position-absolute border rounded shadow-sm p-3 bg-white" style="top: 100%; left: 0; width: 100%; z-index: 10; max-height: 200px; overflow-y: auto;">
-
+                    <div v-show="slot.showDays" class="position-absolute border rounded shadow-sm p-3 bg-white" style="top: 100%; left: 0; width: 100%; z-index: 10; max-height: 200px; overflow-y: auto;">
                         <div v-for="day in days" :key="day" class="form-check">
-                            <input type="checkbox" :id="'day-' + day" :value="day" v-model="selectedDays" class="form-check-input">
-                            <label :for="'day-' + day" class="form-check-label ms-2">{{ day }}</label>
+                            <input type="checkbox" :id="'day-' + day + index" :value="day" v-model="slot.days" class="form-check-input">
+                            <label :for="'day-' + day + index" class="form-check-label ms-2">{{ day }}</label>
                         </div>
                     </div>
                 </div>
 
                 <button @click="removeSlot(index)" type="button" class="btn btn-danger">&times;</button>
             </div>
-            <button @click="addSlot" type="button" class="btn btn-primary">+ Add Slot</button>
+            <button @click="addSlot" type="button" class="btn btn-primary border fw-bold">+</button>
         </div>
 
-        <button type="submit" class="btn  w-100" style="background-color: #F7AA00!important;">Save Schedule</button>
+        <button type="submit" class="btn   w-100" style="background-color: #F7AA00!important;">Save Schedule</button>
     </form>
 </div>
 
@@ -124,29 +141,20 @@
         </tbody>
 
     </table>
+    {{ form }}
 </div>
 </template>
 
 <script>
 import teacherApi from '@/services/teacherApi';
+
 export default {
     name: 'teacherRoutineComponent',
     data() {
         return {
-            searchQuery: '',
-            roleFilter: '',
-            statusFilter: '',
             teachers: [],
-
-            classSections: [{
-                    id: 1,
-                    name: "Class 5A"
-                },
-                {
-                    id: 2,
-                    name: "Class 6B"
-                },
-            ],
+            classes: ['Playgroup', 'nursary', 'lkg', 'ukg', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+            sections:['A','B','C'],
             subjects: [{
                     id: 1,
                     name: "Math"
@@ -167,37 +175,36 @@ export default {
             days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
             form: {
                 teacherName: "",
-                teacherEmail: "",
-                classSection: "",
-                roomNumber: "",
+
                 schedule: [{
+                    class: "",
+                    section:"",
                     subject: "",
                     startTime: "",
                     endTime: "",
-                    days: []
+                    days: [],
+                    showDays: false, // 👈 Each slot should have its own showDays
                 }]
-            },
-            showDays: false,
-            selectedDays: [],
+            }
         };
     },
     async mounted() {
         try {
             const teacher = await teacherApi.fetchTeachers();
-            console.log("teacers are :", teacher.data)
+            console.log("Teachers:", teacher.data);
             this.teachers = teacher.data;
         } catch (error) {
-            console.error("❌ Error in mounted lifecycle hook:", error);
+            console.error("❌ Error fetching teachers:", error);
         }
     },
     methods: {
-
         addSlot() {
             this.form.schedule.push({
                 subject: "",
                 startTime: "",
                 endTime: "",
-                days: []
+                days: [], // 👈 Each slot has its own separate days array
+                showDays: false // 👈 Each slot has its own showDays toggle
             });
         },
         removeSlot(index) {
@@ -206,10 +213,7 @@ export default {
         submitForm() {
             console.log("Form Data:", this.form);
             alert("Schedule saved successfully!");
-        },
-        // async getTeachers(){
-        //   const teacher await=
-        // }
+        }
     }
 };
 </script>

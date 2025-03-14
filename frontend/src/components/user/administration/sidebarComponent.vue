@@ -45,7 +45,7 @@
         <!-- Class & Subject Management -->
         <div class="group">
             <h3>🏫 Class & Subject Management</h3>
-            <li><a href="#">🏠 Manage Classes</a></li>
+            <li><router-link :to="{ name: 'ManageClasses' }">🏠  Manage Classes</router-link></li>
             <li><a href="#">📖 Manage Subjects</a></li>
             <li><a href="#">🔄 Assign Subjects to Classes</a></li>
         </div>
