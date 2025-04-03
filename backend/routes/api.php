@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\teacher\teacherController;
+use App\Http\Controllers\Admin\ClassSectionController;
+
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -28,6 +31,10 @@ Route::prefix('administrator')->middleware('auth:sanctum')->group(function(){
     Route::post('/create/users', [UserController::class, 'createUser']); 
     Route::get('/users', [UserController::class, 'getSchoolUsers']);
     Route::get('/schools',[SchoolController::class,'index']);
+
+Route::post('/class', [ClassSectionController::class, 'createClass']);
+Route::post('/admin/section', [ClassSectionController::class, 'createSection']);
+
     
 });
 

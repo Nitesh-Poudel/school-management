@@ -26,8 +26,8 @@ class UserController extends Controller
     
         // Retrieve users belonging to the given school ID along with their roles
         $users = User::where('school_id', $req->schoolId)
-            ->with('roles') // Assuming a User-Role relationship exists
-            ->get();
+        ->with('roles') // Assuming a User-Role relationship exists
+        ->paginate(10);
     
         // Return response
         return response()->json([
@@ -176,7 +176,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with(['roles.school'])->get();
+        $users = User::with(['roles.school'])->paginate(10);
         return response()->json($users);
     }
 

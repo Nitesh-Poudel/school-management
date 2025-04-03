@@ -9,7 +9,7 @@ const administrationApiService = {
     return response
   },
 
-  async getUsers() {
+  async getUsers(page) {
     const authStore = useAuthStore();
     console.log("Auth Store:", authStore); // Debugging
     const schoolId = authStore.school_id;
@@ -17,8 +17,8 @@ const administrationApiService = {
     
     console.log("school id is ",schoolId)
     try {
-      const response = await api.get('/administrator/users', {
-        params: { schoolId } // Pass schoolId as a query parameter
+      const response = await api.get('/administrator/users?page=3', {
+        params: { schoolId,page} // Pass schoolId as a query parameter
       });
       return response;
     } catch (error) {
@@ -27,6 +27,9 @@ const administrationApiService = {
     }
    
   },
+
+
+
 
   getUserById(userId) {
     return api.get(`/users/${userId}`);
