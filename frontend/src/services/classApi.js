@@ -1,11 +1,15 @@
 import api from '@/services/api';
 
-const classSectionApiService = {
+const classApiService = {
     // Create class api
-    async createClass(){
+    async createClass(classData){
+
+        console.log("class data is", classData)
         try {
             console.log('creating the class classes...');
-            const response = await api.post('/administrator/class');
+            const response = await api.post('/administrator/class',
+                 { classData }
+                );
             console.log('Class List:', response);
             // return response.data;
         } catch (error) {
@@ -14,4 +18,4 @@ const classSectionApiService = {
         }
     },
 }
-export default classSectionApiService;
+export default classApiService; 

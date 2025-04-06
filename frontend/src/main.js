@@ -10,6 +10,8 @@ import 'chart.js/auto';
 import 'typeface-poppins';
 import 'typeface-roboto';
 
+import 'font-awesome/css/font-awesome.min.css';
+
 
 import "bootstrap-icons/font/bootstrap-icons.css";
 

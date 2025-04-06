@@ -17,7 +17,7 @@ const administrationApiService = {
     
     console.log("school id is ",schoolId)
     try {
-      const response = await api.get('/administrator/users?page=3', {
+      const response = await api.get(`/administrator/users?page=${page}`, {
         params: { schoolId,page} // Pass schoolId as a query parameter
       });
       return response;
