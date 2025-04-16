@@ -83,6 +83,10 @@
     <div class="text-center mt-3">
         <button @click="saveAll" class="btn w-100">Save All</button>
     </div>
+
+    <div class="text-center mt-3">
+        <button @click="resetClassData" class=" w-100 btn-danger">Reset All</button>
+    </div>
 </div>
 </template>
 
@@ -183,6 +187,9 @@ export default {
             }
         };
 
+
+        classApiService.fetchClassData();
+
         fetchTeachers(); // Call the async function
     },
     methods: {
@@ -192,6 +199,11 @@ export default {
             this.sections.push(this.newSection);
             this.newSection = "";
             // }
+        },
+
+        resetClassData(){
+                alert('going to delete');
+                classApiService.deleteClassData()
         },
 
         // Toggle the dropdown for selecting sections for a particular class

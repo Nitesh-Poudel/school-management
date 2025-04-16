@@ -17,5 +17,35 @@ const classApiService = {
             throw error; // Re-throw for handling in the component
         }
     },
+
+
+    async fetchClassData(){
+        console.log('getting class data of school');
+        try{
+            console.log('class ko data haru getting');
+            const response= await api.get('/administrator/class');
+            console.log(' class data from fetchData ',response)
+            console.log(response.data)
+        }
+        catch(error){
+            console.error('Error fetching classes:', error);
+            throw error; // Re-throw for handling in the component
+        }
+    },
+
+
+    async deleteClassData(){
+        console.log('deleting class data of school');
+        try{
+            console.log('deleting class data of school');
+            const response= await api.delete('/administrator/class');
+            console.log(response)
+            return response.data.message;
+        }
+        catch(error){
+            console.error('Error fetching classes:', error);
+            throw error; // Re-throw for handling in the component
+        }
+    }
 }
 export default classApiService; 

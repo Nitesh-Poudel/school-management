@@ -32,8 +32,11 @@ Route::prefix('administrator')->middleware('auth:sanctum')->group(function(){
     Route::get('/users', [UserController::class, 'getSchoolUsers']);
     Route::get('/schools',[SchoolController::class,'index']);
 
-Route::post('/class', [ClassSectionController::class, 'createClass']);
-Route::post('/admin/section', [ClassSectionController::class, 'createSection']);
+    Route::post('/class', [ClassSectionController::class, 'createClass']);
+    Route::get('/class', [ClassSectionController::class, 'getClassData']);
+    Route::delete('/class', [ClassSectionController::class, 'deleteClassData']);
+    
+    Route::post('/admin/section', [ClassSectionController::class, 'createSection']);
 
     
 });

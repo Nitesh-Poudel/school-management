@@ -21,8 +21,8 @@ class Classroom extends Model
     // }
 
     // // Relationship with the Teacher (User) model
-    // public function teacher()
-    // {
-    //     return $this->belongsTo(User::class, 'class_teacher_id');
-    // }
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'class_teacher_id');
+    }
 }

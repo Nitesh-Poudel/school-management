@@ -36,15 +36,41 @@ class ClassSectionController extends Controller
             }
 
         }
-       
-
-
 
         return response()->json([
             'class' => $classData, // Return actual class data
             'school_id' => $request->header('School-ID'), // Retrieve the School-ID header
             'message' => 'Class created successfully!',
         ], 200);
+    }
+
+
+    public function getClassData(Request $req){
+        $school_id=$req->header('School_ID');
+        $classData=Classroom::where('school_id',$school_id)->with('teacher')->get();
+
+        return response()->json([
+         'data'=>$classData,
+         'message'=>'class data of school'
+        ]);
+
+        Log::info("class data: " .$classData);
+        Log::info("class data of school: " .$school_id);
+        
+        
+
+
+    }
+
+
+    public function deleteClassData(Request $req){
+        $school_id=$req->header('School_ID');
+
+        Classroom::where('school_id', $school_id)->delete();
+
+        return response()->json([
+            'message' => 'Classroom data deleted successfully.',
+        ]);
     }
 
     public function createSection()
