@@ -26,6 +26,7 @@ const classApiService = {
             const response= await api.get('/administrator/class');
             console.log(' class data from fetchData ',response)
             console.log(response.data)
+            return response.data;
         }
         catch(error){
             console.error('Error fetching classes:', error);

@@ -1,7 +1,7 @@
 <template>
 <div class="container mt-4">
     <!-- Manage Global Sections -->
-    {{ classes }}
+    <!-- {{ classes }} -->
     <div class="card p-3">
         <h5 class="card-title mb-3">Manage Sections</h5>
         <div class="p-3 border rounded bg-light">
@@ -99,7 +99,7 @@ export default {
     data() {
         return {
             newSection: [],
-            sections: ['A', 'B'], // Global list of sections
+            sections: [], // Global list of sections
             showSectionList: null, // Tracks which class dropdown is open
             classes: [{
                     name: "Playgroup",
@@ -173,7 +173,7 @@ export default {
     },
     beforeMount() {
         const fetchTeachers = async () => {
-            try {
+           
                 const response = await teacherApi.fetchTeachers();
                 console.log('fetching teacheres', response.data.teachers)
                 this.teachers = response.data.teachers.map(teacher => ({
@@ -181,14 +181,44 @@ export default {
                     name: teacher.name // Extract the name
                 }));
                 console.log('Teachers names:', this.teachers); // Log the extracted names
-                // Assign the response data to your component's data
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+          
+          
         };
 
 
-        classApiService.fetchClassData();
+        const fetchClassData = async () => {
+            
+                const response = await classApiService.fetchClassData();
+                console.log('fetching ', response.data)
+                const classData = response.data;
+              
+                const allSections = [...new Set(classData.map(item => item.section))];
+                this.sections = allSections;
+
+
+                this.classes.forEach(classItem => {
+            // Filter records from backend matching the current class name
+            const matched = classData.filter(item => item.class_name === classItem.name);
+
+            // Add each section to selectedSections
+            classItem.selectedSections = matched.map(item => item.section);
+
+            // Build classTeachers object for each section
+            classItem.classTeachers = {};
+            matched.forEach(item => {
+                classItem.classTeachers[item.section] = item.class_teacher_id;
+            });
+        });
+          
+        };
+
+        
+
+
+
+
+
+       fetchClassData();
 
         fetchTeachers(); // Call the async function
     },

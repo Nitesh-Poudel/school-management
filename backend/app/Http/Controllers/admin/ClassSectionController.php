@@ -27,12 +27,16 @@ class ClassSectionController extends Controller
                 $teacherId = isset($class['classTeachers'][$section]) ? $class['classTeachers'][$section] : null;
 
                 // Create a new class record
-                Classroom::create([
-                    'school_id' => $school_id, // School ID
-                    'class_name' => $class['name'], // Class name (e.g. Playgroup)
-                    'section' => $section, // Section (e.g. A, B)
-                    'class_teacher_id' => $teacherId, // Teacher ID for the section
-                ]);
+                Classroom::updateOrCreate(
+                    [
+                        'school_id' => $school_id,
+                        'class_name' => $class['name'],
+                        'section' => $section
+                    ],
+                    [
+                        'class_teacher_id' => $teacherId
+                    ]
+                );
             }
 
         }
