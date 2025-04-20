@@ -14,6 +14,10 @@ import ManageUsers from '@/components/user/administration/components/manageUsers
 import CreateUser from '@/components/user/administration/components/createUser.vue';
 import TeacherDashboard from '@/components/user/teacher/teacherDashboard.vue';
 import TeacherHome from '@/components/user/teacher/home';
+
+
+// import classprofileComponent from '@/components/class/classprofileComponent.vue';
+import ClassProfileComponent from '@/components/class/classprofileComponent.vue';
 const routes = [
   {
     path: '/', // URL path
@@ -65,7 +69,11 @@ const routes = [
         path:'/manage/class',
         name: 'ManageClasses', 
         component: manageClassesComponent,
-      }
+      },
+
+      {
+        path: '/class/:level',
+        component: ClassProfileComponent      }
 
     ]
   },
