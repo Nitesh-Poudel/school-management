@@ -1,50 +1,52 @@
 <template>
 <div class="shadow card">
     <div class="header p-1 m-1">
-        <h1>Create User</h1>
+        <h1>Create {{ form.role ? form.role : 'User' }}</h1>
     </div>
     <!-- {{ authStore.user.roles}} -->
     <div class="card border">
         <form @submit.prevent="submitForm">
-            <div class="form-grid">
-                <div class="form-control">
-                    <label for="firstName" class="required">First Name</label>
-                    <input type="text" id="firstName" v-model="form.firstName" placeholder="Enter first name" />
-                </div>
-                <div class="form-control">
-                    <label for="lastName" class="required">Last Name</label>
-                    <input type="text" id="lastName" v-model="form.lastName" placeholder="Enter last name" />
-                </div>
-                <div class="form-control">
-                    <label for="email" class="required">Email Address</label>
-                    <input type="email" id="email" v-model="form.email" placeholder="Enter email address" />
-                </div>
-                <div class="form-control">
-                    <label for="contactNumber" class="required">Contact Number</label>
-                    <input type="tel" id="contactNumber" v-model="form.contactNumber" placeholder="Enter contact number" />
-                </div>
-                <div class="form-control full-width">
-                    <label for="address" class="required">Address</label>
-                    <textarea id="address" v-model="form.address" rows="3" placeholder="Enter full address"></textarea>
-                </div>
-                <div class="form-control full-width">
-                    <label class="required">Role</label>
-                    <div class="role-selection">
-                        <label class="role-card" v-for="role in roles" :key="role.value">
-                            <input type="radio" v-model="form.role" :value="role.value" required />
-                            <div>
-                                <strong>{{ role.label }}</strong>
-                                <p>{{ role.description }}</p>
-                            </div>
-                        </label>
+            <div v-if="!showStudentForm">
+                <div class="form-grid">
+                    <div class="form-control">
+                        <label for="firstName" class="required">First Name</label>
+                        <input type="text" id="firstName" v-model="form.firstName" placeholder="Enter first name" />
                     </div>
-                    <input type="hidden" v-model="form.schoolId" value="authStore.user.school_id" id="">
+                    <div class="form-control">
+                        <label for="lastName" class="required">Last Name</label>
+                        <input type="text" id="lastName" v-model="form.lastName" placeholder="Enter last name" />
+                    </div>
+                    <div class="form-control">
+                        <label for="email" class="required">Email Address</label>
+                        <input type="email" id="email" v-model="form.email" placeholder="Enter email address" />
+                    </div>
+                    <div class="form-control">
+                        <label for="contactNumber" class="required">Contact Number</label>
+                        <input type="tel" id="contactNumber" v-model="form.contactNumber" placeholder="Enter contact number" />
+                    </div>
+                    <div class="form-control full-width">
+                        <label for="address" class="required">Address</label>
+                        <textarea id="address" v-model="form.address" rows="3" placeholder="Enter full address"></textarea>
+                    </div>
+                    <div class="form-control full-width">
+                        <label class="required">Role</label>
+                        <div class="role-selection">
+                            <label class="role-card" v-for="role in roles" :key="role.value">
+                                <input type="radio" v-model="form.role" :value="role.value" required />
+                                <div>
+                                    <strong>{{ role.label }}</strong>
+                                    <p>{{ role.description }}</p>
+                                </div>
+                            </label>
+                        </div>
+                        <input type="hidden" v-model="form.schoolId" value="authStore.user.school_id" id="">
 
+                    </div>
                 </div>
-            </div>
-            <div class="actions">
-                <button type="button" class="btn-cancel">Cancel</button>
-                <button type="submit">Create User</button>
+                <div class="actions">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="submit">Next</button>
+                </div>
             </div>
 
         </form>
@@ -70,6 +72,7 @@ export default {
                 role: '',
                 schoolId: '',
             },
+            showStudentForm: false,
             apiResponse: '',
             roles: [{
                     value: 'administrator',
@@ -103,6 +106,7 @@ export default {
 
     methods: {
         async submitForm() {
+
             this.schoolId = this.authStore.school_id;
             console.log("🛠️ Auth Store Data:", this.authStore);
             console.log("🔍 schoolId from store:", this.authStore.schoolId);
@@ -113,8 +117,17 @@ export default {
                 // Log the exact data returned from the backend
                 console.log('User created successfully:', response.data);
 
+                if (this.form.role === 'student') {
+                    this.$router.push({
+                        name: 'createStudent',
+                        state: {
+                            userId: response.data.user.id
+                        }
+                    });
+                }
+
                 // Show message in alert
-                alert(response.message);
+                // alert(response.message);
             } catch (error) {
                 console.error('Error creating user:', error);
                 alert('Failed to create user. Please try again.');
