@@ -12,7 +12,7 @@ import manageClassesComponent from '@/components/user/administration/components/
 
 import ManageUsers from '@/components/user/administration/components/manageUsers.vue';
 import CreateUser from '@/components/user/administration/components/createUser.vue';
-import createStudents from '@/components/user/administration/components/rolesCreation/createStudents.vue'
+import createStudent from '@/components/user/administration/components/rolesCreation/createStudents.vue'
 import TeacherDashboard from '@/components/user/teacher/teacherDashboard.vue';
 import TeacherHome from '@/components/user/teacher/home';
 
@@ -60,10 +60,10 @@ const routes = [
       },
 
       {
-        path:'create-user/student',
-        name:'createStudent',
-        component:createStudents,
-      },
+        path: '/students/create/:userId',
+        name: 'createStudent',
+        component: createStudent
+    },
       {
         path:'/manage/teacher',
         component:teacherManagementComponent,

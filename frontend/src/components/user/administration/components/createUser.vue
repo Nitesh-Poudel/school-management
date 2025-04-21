@@ -120,7 +120,7 @@ export default {
                 if (this.form.role === 'student') {
                     this.$router.push({
                         name: 'createStudent',
-                        state: {
+                        params: {
                             userId: response.data.user.id
                         }
                     });
