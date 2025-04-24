@@ -55,4 +55,9 @@ class User extends Authenticatable
         return $this->hasMany(Role::class, 'user_id');
     }
 
+    public function student()
+    {
+        return $this->hasOne(Student::class); // user has one student profile
+    }
+
 }

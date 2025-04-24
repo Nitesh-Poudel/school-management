@@ -4,6 +4,7 @@
     <!-- {{ classes }} -->
     <div class="card p-3">
         <h5 class="card-title mb-3">Manage Sections</h5>
+        {{ classes }}
         <div class="p-3 border rounded bg-light">
             <label class="form-label fw-bold">Section Name</label>
             <div class="input-group">

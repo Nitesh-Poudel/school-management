@@ -109,42 +109,40 @@ const router = createRouter({
 
 
 //  Global Navigation Guard
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore(); // Get auth store
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore();
+
+  // Restore manually if needed
+  if (!authStore.token && localStorage.getItem("auth_token")) {
+    authStore.token = localStorage.getItem("auth_token");
+    authStore.user = JSON.parse(localStorage.getItem("auth_user"));
+    authStore.school_id = localStorage.getItem("school_id");
+  }
+
   const token = authStore.token;
   const user = authStore.user;
-  const userRole = user?.role || null;
+  const userRoles = user?.roles || [];
 
-  // 1️⃣ Redirect if trying to access authenticated pages without login
   if (to.meta.requiresAuth && !token) {
     console.warn("🔒 No token found, redirecting to login...");
     return next("/login");
   }
 
-  // 2️⃣ Restrict login page for logged-in users
   if (to.meta.guestOnly && token) {
-    console.info("✅ Already logged in, redirecting to home...");
     return next("/");
   }
 
   if (to.meta.requiredUserRoles) {
-    const userRoles = user?.roles || []; // Ensure it's an array
-    const hasRequiredRole = to.meta.requiredUserRoles.some((role) => userRoles.includes(role));
-
-    if (!hasRequiredRole) {
-      console.error(`⛔ Access denied! User does not have required role.`);
+    const hasRole = to.meta.requiredUserRoles.some(role => userRoles.includes(role));
+    if (!hasRole) {
+      console.warn("🚫 No required role, redirecting to /");
       return next("/");
     }
   }
 
-  // 3️⃣ Role-based access control
-  if (to.meta.roles && !to.meta.roles.includes(userRole)) {
-    console.error("⛔ Unauthorized! Redirecting...");
-    return next("/");
-  }
-
   next();
 });
+
 
 
 export default router;

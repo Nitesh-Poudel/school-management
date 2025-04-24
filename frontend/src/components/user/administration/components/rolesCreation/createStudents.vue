@@ -5,17 +5,16 @@
     <h2>Create Student Info</h2>
     {{ form }}
     <div class="form-grid bg-white">
-        <div class="form-control">
-            <label for="class" class="required">Class</label>
-            <select id="class" v-model="form.class">
-                <option disabled value="">Select class</option>
-                <option v-for="grade in grades" :key="grade" :value="grade">{{ grade }}</option>
-            </select>
-        </div>
+            
 
         <div class="form-control">
-            <label for="section">Section</label>
-            <input type="text" id="section" v-model="form.section" placeholder="Enter section (e.g. A, B, C)" />
+            <label for="classSection" class="required">Class & Section</label>
+            <select id="classSection" v-model="form.class">
+                <option disabled value="">Select class & section</option>
+                <option v-for="item in allClassData" :key="item.id" :value="item.id">
+                    {{ item.class_name }} - {{ item.section }}
+                </option>
+            </select>
         </div>
 
         <div class="form-control">
@@ -50,17 +49,28 @@
             <button class="btn btn-secondary" @click="submitForm">Submit</button>
         </div>
     </div>
+    <div v-if="Object.keys(errors).length" class="text-danger">
+  <ul typr="none">
+    <li v-for="(messages, field) in errors" :key="field">
+      {{ messages[0] }}
+    </li>
+  </ul>
+</div>
+
+
 </div>
 </template>
 
 <script>
+import classApiService from '@/services/classApi';
+import studentApi from '@/services/studentsApi';    
 export default {
     name: 'createStudent',
     data() {
         return {
             form: {
                 class: '',
-                section: '',
+               
                 rollNumber: '',
                 dob: '',
                 gender: '',
@@ -68,38 +78,64 @@ export default {
                 emergencyContact: '',
                 user_id: null, // will be set from route or state
             },
-            grades: ['Nursery', 'LKG', 'UKG', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            sections: [],
+            grades: [],
+            allClassData: [],
+
+            errors:{ },
+
         };
     },
     mounted() {
         const userIdFromParams = this.$route.params ?.userId;
         this.form.user_id = userIdFromParams || null;
         console.log("Received user ID for student:", this.form.user_id);
+
+        this.getClassdata();
     },
     methods: {
         goBack() {
             this.$router.go(-1); // or use push to a specific route
         },
         async submitForm() {
-            try {
-                if (!this.form.user_id) {
-                    alert("User ID is missing. Cannot submit student info.");
-                    return;
-                }
+    try {
+        const response = await studentApi.createStudent(this.form);
+        console.log("API response:", response);
 
-                // Example API call – you can replace with actual function
-                const response = await this.$axios.post('/api/students', this.form);
+        if (response.success) {
+            alert(response.message || 'Student created successfully');
+            this.errors = {};
+        } else {
+            this.errors = response.errors || {};
+            console.error("Validation errors:", this.errors);
+        }
 
-                console.log("Student created:", response.data);
-                alert("Student information submitted successfully.");
-                this.$router.push({
-                    name: 'userList'
-                }); // or wherever you want to go
-            } catch (error) {
-                console.error("Error submitting student form:", error);
-                alert("Failed to submit student information.");
-            }
-        },
+    } catch (err) {
+        console.error("Unexpected error", err);
+        this.errors = { general: ['Something went wrong'] };
+    }
+}
+
+,
+
+        async getClassdata() {
+            var response = await classApiService.fetchClassData();
+            const classdata = response.data
+
+            this.allClassData = classdata;
+
+            console.log('All calss data', this.allClassData) // ✅
+
+            console.log('hahahha', classdata)
+            const allSections = [...new Set(classdata.map(item => item.section))];
+            this.sections = allSections;
+
+            const allClasses = [...new Set(classdata.map(item => item.class_name))];
+            this.grades = allClasses;
+            console.log(allSections)
+
+        }
+
     },
 };
 </script>

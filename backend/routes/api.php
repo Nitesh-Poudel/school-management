@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\teacher\teacherController;
 use App\Http\Controllers\Admin\ClassSectionController;
 
+use App\Http\Controllers\StudentController;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -38,6 +40,7 @@ Route::prefix('administrator')->middleware('auth:sanctum')->group(function(){
     
     Route::post('/admin/section', [ClassSectionController::class, 'createSection']);
 
+    Route::post('/student',[StudentController::class,'create'] );
     
 });
 
