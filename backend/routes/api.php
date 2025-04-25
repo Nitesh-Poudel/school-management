@@ -44,6 +44,8 @@ Route::prefix('administrator')->middleware('auth:sanctum')->group(function(){
     
 });
 
+// student controller
+Route::get('class/{classId}/students',[StudentController::class,'getStudentsByClass']);
 
 Route::prefix('teachers')->middleware('auth:sanctum')->group(function(){
     Route::get('/', [teacherController::class, 'getTeacher']); 

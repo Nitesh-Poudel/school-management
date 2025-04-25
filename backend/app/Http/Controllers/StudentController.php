@@ -90,10 +90,33 @@ class StudentController extends Controller
 
         Log::info("class data: " .$classData);
         Log::info("class data of school: " .$school_id);
-        
-        
 
 
+    }
+
+    public function getStudentsByClass($classId) {
+        $studentsOfClass = User::with(['student']) // eager load student
+            ->whereHas('student', function($query) use ($classId) {
+                $query->where('class_id', $classId);
+            })
+            ->get();
+
+            $classroom = Classroom::with(['teacher:id,name'])->find($classId);
+
+
+            // $classTeacher = $classroom && $classroom->teacher
+            //     ? [
+            //         'id' => $classroom->teacher->id,
+            //         'name' => $classroom->teacher->name,
+            //     ]
+            //     : null;
+    
+            return response()->json([
+                'data'=>$studentsOfClass,
+                'count'=>$studentsOfClass->count(),
+                'class'=>$classroom,
+                'message'=>'class data of school'
+               ]);
     }
    
 }

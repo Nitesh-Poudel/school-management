@@ -4,7 +4,7 @@
     <!-- {{ classes }} -->
     <div class="card p-3">
         <h5 class="card-title mb-3">Manage Sections</h5>
-        {{ classes }}
+        <!-- {{ classes }} -->
         <div class="p-3 border rounded bg-light">
             <label class="form-label fw-bold">Section Name</label>
             <div class="input-group">
@@ -33,8 +33,11 @@
         <div class="col-md-4">
             <h5>Classes</h5>
             <ul class="list-group">
-                <li v-for="(classItem, index) in classes" :key="index" class="list-group-item">
-                    <router-link :to="`/class/${classItem.name}`">{{ classItem.name }}</router-link>
+
+                <li v-for="classItem in testClassGrouped" :key="classItem.id" class="list-group-item">
+                    <router-link :to="`/class/${classItem.id}`">
+                        {{ classItem.class }}<template v-if="classItem.showSection">-{{ classItem.section }}</template>
+                    </router-link>
                 </li>
 
             </ul>
@@ -159,7 +162,7 @@ export default {
                     classTeachers: {}
                 },
                 {
-                    name: "Class 9",
+                    name: "Class 922",
                     selectedSections: [],
                     classTeachers: {}
                 },
@@ -170,9 +173,29 @@ export default {
                 }
             ],
             teachers: [], // Sample teacher list
-            classfromServer: [],
+            // classfromServer: [],
+            testClass: [] //this is class from serverr now for linking
         };
     },
+    computed: {
+        testClassGrouped() {
+            // Count how many sections each class has
+            const classSectionMap = {};
+            this.testClass.forEach(item => {
+                if (!classSectionMap[item.className]) {
+                    classSectionMap[item.className] = [];
+                }
+                classSectionMap[item.className].push(item.section);
+            });
+
+            // Mark each item with flag if it has multiple sections
+            return this.testClass.map(item => ({
+                ...item,
+                showSection: classSectionMap[item.className].length > 1
+            }));
+        }
+    },
+
     beforeMount() {
         const fetchTeachers = async () => {
 
@@ -190,8 +213,17 @@ export default {
 
             const response = await classApiService.fetchClassData();
             console.log('fetching ', response.data)
-            const classData = response.data;
 
+            const classData = response.data;
+            console.log("class data islkknkkk", classData)
+
+            const onlyClasses = classData.map(item => ({
+                id: item.id,
+                class: item.class_name,
+                section: item.section
+            }));
+
+            this.testClass = onlyClasses;
             const allSections = [...new Set(classData.map(item => item.section))];
             this.sections = allSections;
 
