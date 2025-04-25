@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Classroom;
 use Illuminate\Validation\ValidationException;
 
 
@@ -25,6 +27,10 @@ class StudentController extends Controller
                 'emergencyContact' => 'required|string|max:20',
                 'user_id' => 'required|exists:users,id',
             ]);
+
+
+          
+            
             
             $student = Student::create([
                 'user_id' => $validated['user_id'],
@@ -50,5 +56,44 @@ class StudentController extends Controller
         }
     }
     
-    
+    // public function getStudents(){
+           
+    //     $users = User::whereHas('roles', function ($query) {
+    //         $query->where('role', 'student');
+    //     })
+    //     ->where('school_id',1)
+    //     ->select('id','name')
+    //     // ->with('roles')
+    //     ->get();
+    //     return $users;
+    // }
+    // public function getStudents(){
+           
+    //     $classes = Classroom::where('school_id',1)
+    //     ->select('id','class_name')
+    //     // ->with('roles')
+    //     ->get();
+    //     return $users;
+    // }
+
+    public function getStudents(Request $req){
+        $school_id=$req->header('School_ID');
+        $school_id=1;
+        $classData=Classroom::where('school_id',$school_id)->with('teacher')->get();
+
+
+        
+        return response()->json([
+         'data'=>$classData,
+         'message'=>'class data of school'
+        ]);
+
+        Log::info("class data: " .$classData);
+        Log::info("class data of school: " .$school_id);
+        
+        
+
+
+    }
+   
 }

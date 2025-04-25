@@ -53,6 +53,8 @@ class ClassSectionController extends Controller
         $school_id=$req->header('School_ID');
         $classData=Classroom::where('school_id',$school_id)->with('teacher')->get();
 
+
+        
         return response()->json([
          'data'=>$classData,
          'message'=>'class data of school'
