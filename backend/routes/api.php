@@ -36,7 +36,7 @@ Route::prefix('administrator')->middleware('auth:sanctum')->group(function(){
 
     Route::post('/class', [ClassSectionController::class, 'createClass']);
     Route::get('/class', [ClassSectionController::class, 'getClassData']);
-    Route::delete('/class', [ClassSectionController::class, 'deleteClassData']);
+    Route::delete('/class/{schoolId}', [ClassSectionController::class, 'deleteClassData']);
     
     Route::post('/admin/section', [ClassSectionController::class, 'createSection']);
 

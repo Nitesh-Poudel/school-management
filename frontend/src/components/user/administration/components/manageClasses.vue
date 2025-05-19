@@ -97,15 +97,21 @@
 
 <script>
 import classApiService from '@/services/classApi'; // Correct import name
-
+import { useAuthStore } from "@/stores/auth";
 import teacherApi from '@/services/teacherApi';
 export default {
     name: 'manageClassesComponent',
+    setup() { // <-- Add setup for pinia store
+        const authStore = useAuthStore();
+        return { authStore };
+    },
     data() {
         return {
+            schoolId:'',
             newSection: [],
             sections: [], // Global list of sections
             showSectionList: null, // Tracks which class dropdown is open
+            
             classes: [{
                     name: "Playgroup",
                     selectedSections: [],
@@ -173,7 +179,7 @@ export default {
                 }
             ],
             teachers: [], // Sample teacher list
-            // classfromServer: [],
+            classfromServer: [],
             testClass: [] //this is class from serverr now for linking
         };
     },
@@ -194,13 +200,19 @@ export default {
                 showSection: classSectionMap[item.className].length > 1
             }));
         }
+    
     },
 
     beforeMount() {
+        console.log("school is from pinea here",this.authStore.user.school_id)
+        this.schoolId = this.authStore.user.school_id
+        
         const fetchTeachers = async () => {
 
             const response = await teacherApi.fetchTeachers();
-            console.log('fetching teacheres', response.data.teachers)
+            // console.log('fetching teacheres', response.data.teachers[0].school_id)
+            // this.schoolId=response.data.teachers.school_id
+           
             this.teachers = response.data.teachers.map(teacher => ({
                 id: teacher.id, // Extract the id
                 name: teacher.name // Extract the name
@@ -258,7 +270,10 @@ export default {
 
         resetClassData() {
             alert('going to delete');
-            classApiService.deleteClassData()
+            
+            console.log()
+            // return;
+            classApiService.deleteClassData(this.schoolId)
         },
 
         // Toggle the dropdown for selecting sections for a particular class

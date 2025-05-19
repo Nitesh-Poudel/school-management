@@ -114,9 +114,7 @@ export default {
         console.error("Unexpected error", err);
         this.errors = { general: ['Something went wrong'] };
     }
-}
-
-,
+},
 
         async getClassdata() {
             var response = await classApiService.fetchClassData();

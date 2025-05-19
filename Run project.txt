@@ -1,0 +1,10 @@
+frontend =frontend :npm run serve
+backend =backend :php artisan serve
+
+create database: school_management
+
+run migration on backend :php artisan migrte
+
+run seeder 1by one 
+SchoolTableSeeder
+UserSeeder

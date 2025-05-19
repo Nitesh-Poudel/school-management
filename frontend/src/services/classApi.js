@@ -35,11 +35,13 @@ const classApiService = {
     },
 
 
-    async deleteClassData(){
+    async deleteClassData(schoolId){
+        alert(schoolId)
+        
         console.log('deleting class data of school');
         try{
             console.log('deleting class data of school');
-            const response= await api.delete('/administrator/class');
+            const response= await api.delete(`/administrator/class/${schoolId}`);
             console.log(response)
             return response.data.message;
         }
