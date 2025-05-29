@@ -11,7 +11,10 @@ import teacherRoutineComponent from '@/components/user/administration/components
 import manageClassesComponent from '@/components/user/administration/components/manageClasses.vue';
 
 import ManageUsers from '@/components/user/administration/components/manageUsers.vue';
+
 import CreateUser from '@/components/user/administration/components/createUser.vue';
+import updateUser from '@/components/layout/updateUserFormComponent.vue';
+
 import createStudent from '@/components/user/administration/components/rolesCreation/createStudents.vue'
 import TeacherDashboard from '@/components/user/teacher/teacherDashboard.vue';
 import TeacherHome from '@/components/user/teacher/home';
@@ -60,12 +63,17 @@ const routes = [
         name: 'CreateUsers',
         component: CreateUser,
       },
+      {
+        path: 'updatate-user/:userId', 
+        name: 'CreateUsers',
+        component: updateUser,
+      },
 
       {
         path: '/students/create/:userId',
         name: 'createStudent',
         component: createStudent
-    },
+      },
       {
         path:'/manage/teacher',
         component:teacherManagementComponent,

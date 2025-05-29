@@ -48,7 +48,7 @@ class UserController extends Controller
             $validatedData = $req->validate([
                 'firstName' => 'required|string|max:255',
                 'lastName' => 'nullable|string|max:255',
-                'email' => 'nullable|email',
+                  'email' => 'nullable|email|unique:users,email',
                 'address' => 'nullable|string',
                 'role' => 'nullable|in:teacher,admin,student,parent',
                 'schoolId' => 'required'
@@ -106,7 +106,7 @@ class UserController extends Controller
 
             // Create user
             $user = User::create([
-                'name' => $validatedData['firstName'].$validatedData['lastName'],
+                'name' => $validatedData['firstName'].' '.$validatedData['lastName'],
                 'email' => $validatedData['email'] ?? null,
                 // 'contact_number' => $validatedData['contactNumber'] ?? null,
                 't_address' => $validatedData['address'] ?? null,

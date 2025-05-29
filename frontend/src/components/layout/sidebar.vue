@@ -10,6 +10,9 @@
     <div class="teacher-sidebar " v-if="authStore.user.roles.includes('teacher')">
       <TeacherSidebarComponent />
     </div>
+    <div class="teacher-sidebar " v-if="authStore.user.roles.includes('student')">
+      <TeacherSidebarComponent />
+    </div>
   </div>
 </template>
 

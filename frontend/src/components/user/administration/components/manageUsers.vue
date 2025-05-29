@@ -54,7 +54,7 @@
                 {{ user.status }}
               </td>
               <td>
-                <button class="edit-btn">Edit</button>
+                <button class="edit-btn btn " @click="editUser(user.id)">Edit</button>
               </td>
             </tr>
           </tbody>
@@ -95,7 +95,8 @@
         currentPage: 1,
         lastPage: 1,
         totalUsers: 0,
-        perPage: 10
+        perPage: 10,
+        showUpdateUserForm:false
       };
     },
   
@@ -120,6 +121,12 @@
     },
   
     methods: {
+
+      editUser(userId){
+        alert(`This is clicked ${userId}`)
+        this.showUpdateUserForm=true;
+      },
+
       async fetchUsers(page = 1) {
         this.loading = true;
         try {
